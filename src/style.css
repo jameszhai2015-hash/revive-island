@@ -1,0 +1,325 @@
+/* tailwind config */
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'ZCOOL QingKe HuangYou';
+  src: url('/fonts/zcool-qingke-subset.woff2') format('woff2');
+}
+
+@utility font-cute {
+  font-family:
+    'ZCOOL QingKe HuangYou', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+@theme {
+  --color-background: #79b2c3;
+  --color-primary: #0084d1;
+}
+
+@utility hex {
+  @apply flex flex-col justify-center items-center;
+  mask-image: url('/hex-mask.svg');
+  mask-size: cover;
+  -webkit-mask-image: url('/hex-mask.svg');
+  -webkit-mask-size: cover;
+}
+
+@utility my-cursor-auto {
+  cursor: url('/cursors/auto.png'), auto;
+}
+
+@utility my-cursor-pointer {
+  cursor: url('/cursors/pointer.png'), pointer;
+}
+
+@utility my-cursor-grab {
+  cursor: url('/cursors/grab.png'), grab;
+}
+
+@utility my-cursor-grabbing {
+  cursor: url('/cursors/grabbing.png'), grabbing;
+}
+
+@utility my-cursor-move {
+  cursor: url('/cursors/move.png'), move;
+}
+
+@utility p-mobile {
+  @apply max-sm:pb-20 transition-[padding];
+}
+
+@theme {
+  --animate-wiggle: wiggle 2s infinite ease-in-out;
+
+  @keyframes wiggle {
+    0% {
+      transform: rotate(0deg);
+    }
+    5% {
+      transform: rotate(10deg);
+    }
+    10% {
+      transform: rotate(-10deg);
+    }
+    15% {
+      transform: rotate(10deg);
+    }
+    20% {
+      transform: rotate(-10deg);
+    }
+    25% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+/* styles */
+* {
+  -webkit-touch-callout: none;
+  @apply select-none touch-manipulation;
+}
+
+main * {
+  @apply my-cursor-auto!;
+}
+
+main a,
+main button,
+main a *,
+main button * {
+  @apply my-cursor-pointer!;
+}
+
+a {
+  @apply inline-block underline hover:text-primary active:text-primary;
+}
+
+html,
+body {
+  @apply font-cute;
+}
+
+main {
+  @apply h-full;
+}
+
+.webgl {
+  @apply fixed top-0 left-0 outline-none;
+}
+
+.webgl.grab {
+  @apply my-cursor-grab!;
+}
+
+.webgl.grabbing {
+  @apply my-cursor-grabbing!;
+}
+
+.webgl.move {
+  @apply my-cursor-move!;
+}
+
+.webgl.pointer {
+  @apply my-cursor-pointer!;
+}
+
+/* loading */
+.loading {
+  @apply fixed top-0 w-full h-full z-10;
+  @apply flex flex-col gap-8 justify-center items-center p-mobile;
+}
+
+.loading .spinner {
+  @apply size-28 bg-primary hex scale-0;
+}
+
+.loading .title {
+  @apply text-5xl text-white scale-0 uppercase;
+  text-shadow: 5px 5px 2px var(--color-primary);
+}
+
+.loading #progress {
+  @apply absolute -bottom-5 text-white scale-0;
+}
+
+/* menu */
+.menu {
+  @apply fixed top-0 w-full h-full z-10;
+  @apply flex flex-col justify-center items-center p-mobile;
+}
+
+.menu .bg-hex {
+  @apply hex bg-white/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0 flex justify-center items-center;
+  @apply after:hex after:bg-primary/80 after:size-46 after:content-[''];
+}
+
+.menu .title {
+  @apply text-7xl text-white scale-0 uppercase;
+  text-shadow: 5px 5px 2px var(--color-primary);
+}
+
+.menu button {
+  @apply scale-0;
+}
+
+.menu button:has(label) {
+  @apply text-3xl;
+}
+
+.menu footer {
+  @apply text-white opacity-0 text-xl absolute bottom-4;
+  text-shadow: 0.5px 0.5px 0.5px black;
+}
+
+.menu footer a {
+  @apply hover:text-sky-200 active:text-sky-200;
+}
+
+/* modal */
+.modal-container {
+  @apply relative h-full w-full flex items-center justify-center p-mobile;
+}
+
+.modal-container .modal-content {
+  @apply hex bg-white text-slate-600 size-96 min-w-96 z-10 flex items-center justify-center px-12 scale-0;
+}
+
+.modal {
+  @apply flex flex-col items-center gap-4 text-center;
+}
+
+.modal h2 {
+  @apply text-2xl;
+}
+
+.modal p {
+  @apply leading-4;
+}
+
+#credits-modal.modal a {
+  @apply underline hover:text-primary active:text-primary;
+}
+
+/* UI */
+button.hex {
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 active:bg-sky-200 text-primary min-w-12 min-h-12;
+}
+
+button.hex.toggle-off {
+  @apply text-red-700;
+}
+
+button.hex.disabled {
+  @apply bg-white opacity-60 text-primary;
+}
+
+button.hex:has(label) {
+  @apply size-28 flex flex-col justify-center items-center gap-1;
+}
+
+button.hex label {
+  @apply text-xl leading-4 whitespace-nowrap;
+}
+
+button.hex.primary {
+  @apply bg-primary text-white hover:bg-sky-400 active:bg-sky-400;
+}
+
+button.hex.secondary {
+  @apply bg-slate-200 hover:bg-slate-100 active:bg-slate-100;
+}
+
+div:has(#level) {
+  @apply bg-linear-to-b to-100% from-background to-transparent py-5 pb-8 absolute top-0 w-full text-center pointer-events-none;
+}
+
+/* Notch safe-area: keep top elements clear of the inset */
+div:has(#level) {
+  padding-top: calc(2.5rem + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+}
+
+#menu {
+  top: calc(1rem + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+}
+
+input[type='radio'] {
+  @apply opacity-0 absolute;
+}
+
+label:has(input[type='radio']) {
+  @apply flex gap-2 text-xl my-cursor-pointer!;
+}
+
+input[type='radio'] ~ .radio-mark {
+  @apply hex size-6 bg-primary inline-block relative my-cursor-pointer!;
+}
+
+input[type='radio'] ~ .radio-mark::before {
+  @apply hex size-5 bg-white inline-block absolute content-[''] inset-0.5;
+}
+
+input[type='radio']:checked ~ .radio-mark::after {
+  @apply hex size-4 bg-primary inline-block absolute content-[''] inset-1;
+}
+
+#level {
+  @apply text-4xl text-primary;
+  text-shadow: 1px 1px 2px white;
+}
+
+#timer-bar {
+  width: 13rem;
+  max-width: 58vw;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 4px 14px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+#timer-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-primary), #38bdf8);
+  transition: width 0.25s linear;
+}
+
+#timer.danger #timer-fill {
+  background: linear-gradient(90deg, #ff5d5d, #ff9e8a);
+}
+
+#timer-seconds {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow:
+    1px 1px 0 #fff,
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff;
+}
+
+#timer.danger #timer-seconds {
+  color: #ff5d5d;
+}
+
+#tutorial {
+  @apply absolute bottom-28 px-10 w-full text-center text-2xl leading-6 text-white animate-pulse pointer-events-none;
+  text-shadow: 1px 1px 2px black;
+}
+
+body.standalone .menu footer,
+body.standalone #back,
+body.standalone #controls,
+body.standalone div:has(#next) {
+  @apply bottom-8;
+}
+
+body.standalone #tutorial {
+  @apply bottom-32;
+}

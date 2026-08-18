@@ -1,0 +1,25 @@
+Revive Island (Mini-tool Edition)
+=================================
+
+English name: Revive Island
+Chinese name: 复苏之岛
+
+This work is a modified derivative of Drysland
+(https://github.com/dammafra/drysland) by Francesco Dammacco,
+Copyright (C) 2025, originally released under the GNU Affero General
+Public License v3.0.
+
+Major modifications:
+
+- Removed Google sign-in and cloud sync; saves now use browser localStorage
+- Removed Sentry, PWA, external font icons and other network dependencies to
+  fit the offline Xiaohongshu mini-tool container
+- Chinese-localized UI with safe-area support
+- Adjusted the level difficulty curve
+
+UI font: ZCOOL QingKe HuangYou (free for commercial use).
+
+Complete source code of this derivative:
+https://github.com/jameszhai2015-hash/revive-island
+
+This work is also released under the GNU Affero General Public License v3.0.

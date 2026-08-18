@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#79b2c3" />
+
+    <title>复苏之岛</title>
+    <meta
+      property="description"
+      content="治愈系水管连接小游戏：旋转方块，让河流重新流过干涸的岛屿。"
+    />
+
+
+    <style>
+      html,
+      body {
+        background-color: #79b2c3;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        width: 100vw;
+        height: 100svh;
+      }
+
+      .icon {
+        width: 1em;
+        height: 1em;
+      }
+
+      button#credits {
+        position: fixed;
+        right: calc(0.25rem + var(--safe-area-inset-right, env(safe-area-inset-right, 0px)));
+        bottom: calc(0.25rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+        width: 1.5rem;
+        height: 1.5rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.55);
+        transform: scale(1) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 30;
+      }
+
+      button#credits .icon {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+
+      #controls,
+      #back,
+      div:has(#next),
+      .menu footer {
+        bottom: calc(
+          1rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+        );
+      }
+
+      #tutorial {
+        bottom: calc(
+          7rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))
+        );
+      }
+    </style>
+    <link rel="stylesheet" href="./style.css" />
+
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+
+  </head>
+
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none" aria-hidden="true">
+      <symbol id="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 5v14l11-7z" />
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </symbol>
+      <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </symbol>
+      <symbol id="icon-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </symbol>
+      <symbol id="icon-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+      </symbol>
+      <symbol id="icon-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      </symbol>
+      <symbol id="icon-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+      </symbol>
+      <symbol id="icon-water" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 14c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-3 5 0" />
+      </symbol>
+    </svg>
+
+    <main>
+      <div class="loading">
+        <div class="absolute z-10 flex flex-col items-center">
+          <p class="title">加载中</p>
+          <span id="progress"></span>
+        </div>
+        <div class="spinner"></div>
+      </div>
+
+      <div class="menu">
+        <div class="relative text-center flex flex-col items-center">
+          <div class="bg-hex"></div>
+          <h1 class="title">复苏之岛</h1>
+          <div class="flex flex-col items-center gap-4 relative mt-24">
+            <div class="flex flex-row justify-center gap-4">
+              <button id="continue" class="hex hidden">
+                <svg class="icon"><use href="#icon-play" /></svg>
+                <label>继续</label>
+              </button>
+              <button id="start" class="hex">
+                <svg class="icon"><use href="#icon-play" /></svg>
+                <label>开始游戏</label>
+              </button>
+            </div>
+            <button id="quit" class="hex hidden">
+              <svg class="icon"><use href="#icon-x" /></svg>
+              <label>退出游戏</label>
+            </button>
+          </div>
+        </div>
+
+        <footer class="flex flex-col items-center gap-2"></footer>
+      </div>
+
+      <div class="modal-container">
+        <div class="modal-content hidden"></div>
+        <button id="modal-close" title="关闭" class="hex absolute mb-70 ml-74 z-10 hidden">
+          <svg class="icon"><use href="#icon-x" /></svg>
+        </button>
+      </div>
+
+      <canvas class="webgl grab"></canvas>
+
+      <button id="credits" title="关于" aria-label="关于">
+        <svg class="icon"><use href="#icon-info" /></svg>
+      </button>
+
+      <!-- modals -->
+      <div id="credits-modal" class="modal hidden">
+        <h2>Thanks to</h2>
+        <div class="flex flex-col gap-2 text-sm">
+          <p>
+            This game is based on Drysland by Francesco Dammacco, licensed under the GNU
+            Affero General Public License v3.0. Source: https://github.com/dammafra/drysland
+          </p>
+          <p>
+            Hexagon Kit and Cursor Pack by Kenney (https://kenney.nl)
+          </p>
+          <p>
+            Wind flow implementation by Pavel Boytchev (https://github.com/boytchev)
+          </p>
+          <p>
+            Skybox via Free Stylized (https://freestylized.com/skybox/sky_42/)
+          </p>
+          <p>
+            Sound Effects by
+            floraphonic, freesound_community, Rasool Asaad, Lynda Smith and Sergei
+            Chetvertnykh via Pixabay (https://pixabay.com)
+          </p>
+          <p>
+            Low-Poly Seagull by simonaskLDE (CC BY 4.0,
+            https://creativecommons.org/licenses/by/4.0/), via Sketchfab
+          </p>
+          <p>
+            Sail Ship by Quaternius and Sailboat by Poly by Google
+            (CC BY 3.0, https://creativecommons.org/licenses/by/3.0/), via Poly Pizza
+          </p>
+        </div>
+      </div>
+
+      <!-- header -->
+      <button id="menu" title="主菜单" class="hex absolute top-4 left-4 z-10 hidden">
+        <svg class="icon"><use href="#icon-bars" /></svg>
+      </button>
+      <div>
+        <h1 id="level" class="hidden">第 1 关</h1>
+        <div id="timer" class="flex flex-col items-center gap-1 mt-3">
+          <div id="timer-bar"><i id="timer-fill"></i></div>
+          <span id="timer-seconds">60</span>
+        </div>
+      </div>
+
+      <!-- tutorial -->
+      <p id="tutorial" class="hidden">点击河道方块开始</p>
+
+      <!-- footer -->
+      <div class="absolute bottom-4 flex justify-center w-full pointer-events-none">
+        <button id="next" class="hex text-2xl pointer-events-auto hidden aspect-square">
+          下一关
+        </button>
+      </div>
+
+      <button id="back" title="返回探索" class="hex hidden absolute bottom-4 left-4">
+        <svg class="icon" style="width: 1.5em; height: 1.5em"><use href="#icon-compass" /></svg>
+      </button>
+
+      <div id="controls" class="absolute bottom-4 right-4">
+        <button
+          id="sounds"
+          title="音效开关"
+          class="hex absolute bottom-10 right-6 hidden"
+        >
+          <svg class="icon"><use href="#icon-volume" /></svg>
+        </button>
+        <button id="loop" title="音乐开关" class="hex absolute bottom-0 right-12 hidden">
+          <svg class="icon"><use href="#icon-music" /></svg>
+        </button>
+        <button
+          id="ambience"
+          title="环境音开关"
+          class="hex absolute bottom-0 right-0 hidden"
+        >
+          <svg class="icon"><use href="#icon-water" /></svg>
+        </button>
+      </div>
+    </main>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
